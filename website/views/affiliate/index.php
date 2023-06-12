@@ -5,9 +5,20 @@ use yii\helpers\Html;
 use website\widgets\LinkPager;
 $user = Yii::$app->user->getIdentity();
 $affiliateLink = Url::to(['site/signup', 'affiliate' => $user->getAffiliateCode()], true);
+$this->registerCssFile('https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css', ['depends' => [\website\assets\AppAsset::className()]]);
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js',  ['depends' => [\website\assets\AppAsset::className()]]);
+$this->registerJsFile('https://unpkg.com/axios/dist/axios.min.js',  ['depends' => [\website\assets\AppAsset::className()]]);
 $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js', ['position' => \yii\web\View::POS_HEAD]);
+$this->registerJsFile('https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js',  ['depends' => [\website\assets\AppAsset::className()]]);
 $balance = $user->affiliateBalance();
 ?>
+<style>
+  .table-wrapper .date-time{
+    font-size: 10px;
+    display: block;
+    color: #606060;
+  }
+</style>
 <div class="container profile profile-affiliate my-5">
   <div class="row">
     <div class="col-md-3">
@@ -147,79 +158,131 @@ $balance = $user->affiliateBalance();
     <div class="col-md-12">
       <hr class="my-5" />
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12" id="affiliate-table-component">
       <!-- Transaction History Table -->
+      <p class="lead mb-0">Transaction history</p>
       <div class="d-flex bd-highlight justify-content-between align-items-center orders-history-wrapper mb-3">
-        <p class="lead mb-0">Transaction history</p>
-        <?php $form = ActiveForm::begin(['method' => 'get']);?>
         <div class="d-flex ml-auto">
-          <?= $form->field($searchCommission, 'start_date', [
-            'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
-            'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
-            'inputOptions' => ['class' => 'form-control', 'type' => 'date', 'name' => 'start_date', 'data-date-format'=>"DD MMMM YYYY"]
-          ])->textInput()->label('Start date') ?>
-          <?= $form->field($searchCommission, 'end_date', [
-            'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
-            'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
-            'inputOptions' => ['class' => 'form-control', 'type' => 'date', 'name' => 'end_date']
-          ])->textInput()->label('End date') ?>
-          <?= $form->field($searchCommission, 'status', [
-            'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
-            'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
-            'inputOptions' => ['class' => 'form-control', 'name' => 'status']
-          ])->dropdownList($searchCommission->fetchStatusList(), ['prompt' => 'Select status'])->label('Status') ?>
-          <div class="flex-fill">
-            <button class="btn btn-primary" type="submit">Filter</button>
+          <div class="flex-fill d-flex align-items-center mr-3">
+            <label class="d-block w-100 mr-2 mb-0">Start date</label> 
+            <input type="date" v-model="condition.start_date" data-date-format="DD MMMM YYYY" class="form-control"> 
+          </div>
+          <div class="flex-fill d-flex align-items-center mr-3">
+            <label class="d-block w-100 mr-2 mb-0">End date</label> 
+            <input type="date" v-model="condition.end_date" data-date-format="DD MMMM YYYY" class="form-control"> 
           </div>
         </div>
-        <?php ActiveForm::end(); ?>
+        <div class="d-flex ml-auto">
+          <div class="flex-fill d-flex align-items-center mr-3">
+            <label class="d-block w-100 mr-2 mb-0">By Buyer</label> 
+            <input type="text" v-model="condition.customer_name" class="form-control"> 
+          </div>
+          <div class="flex-fill d-flex align-items-center mr-3">
+            <label class="d-block w-100 mr-2 mb-0">By Game</label> 
+            <input type="text" v-model="condition.game_title" class="form-control"> 
+          </div>
+          <div class="flex-fill d-flex align-items-center mr-3">
+            <label class="d-block w-100 mr-2 mb-0">By Order No.</label> 
+            <input type="text" v-model="condition.order_id" class="form-control"> 
+          </div>
+          
+        </div>
+        
       </div>
-
-      <div class="table-wrapper table-responsive bg-white">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">ID</th>
-              <th class="text-center" scope="col">Quantity</th>
-              <th class="text-center" scope="col">Commission ($)</th>
-              <th class="text-center" scope="col">Status</th>
-              <th class="text-center" scope="col">Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if (!$commissions) : ?>
-            <tr>
-              <td class="text-center" colspan="5">No data</td>
-            </tr>
-            <?php endif; ?>
-            <?php foreach ($commissions as $commission) : ?>
-            <?php $order = $commission->order;?>
-            <tr>
-              <th scope="row">
-                <a href="javascript:;">#<?=$order->id;?></a>
-                <span class="date-time"><?=$order->created_at;?></span>
-              </th>
-              <td class="text-center"><?=number_format($order->quantity, 1);?></td>
-              <td class="text-center"><?=number_format($commission->commission, 1);?>$</td>
-              <td class="text-center"><?=$commission->getStatusLabel();?></td>
-              <td class="text-center"><span href="javascript:;" class="text-green"><?=$commission->description;?></span></td>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
+      <div class="d-flex bd-highlight justify-content-between align-items-center orders-history-wrapper mb-3">
+        <div class="flex-fill" style="margin-left: auto">
+          <button class="btn btn-primary" @click="filterAffiliate">Filter</button>
+        </div>
       </div>
-      <nav aria-label="Page navigation" class="mt-2 mb-5">
-        <?=LinkPager::widget([
-          'pagination' => $pages,
-          'options' => ['class' => 'pagination justify-content-end']
-        ]);?>
-      </nav>
+      <div class="table-wrapper table-responsive bg-white" ref="table"></div>
     </div>
     <!-- END Transaction History Table -->
   </div>
 </div>
 <?php
+$fetchCommissionUrl = Url::to(['affiliate/fetch'], true);
+$csrfTokenName = Yii::$app->request->csrfParam;
+$csrfToken = Yii::$app->request->csrfToken;
 $script = <<< JS
+
+var app = new Vue({
+  el: '#affiliate-table-component',
+  data: function () {
+    return {
+      condition: {
+        order_id: '',
+        start_date: '',
+        end_date: '',
+        customer_name: '',
+        game_title: '',
+      },
+      tableData: [], //data for table to display
+    }
+  },
+  watch: {
+    condition() {
+      console.log('condition', this.condition);
+    }
+  },
+  methods: {
+    filterAffiliate() {
+      // load data
+    axios.post('$fetchCommissionUrl', {
+      '$csrfTokenName': '$csrfToken',
+      condition: this.condition
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(({ data }) => {
+      console.log('data', data.items);
+      this.tableData = data.items.map((item, index) => {
+        item['no'] = index + 1;
+        return item;
+      });
+      new Tabulator(this.\$refs.table, {
+        placeholder:"No Data Available", //display message to user on empty table
+        data: this.tableData, //link data to table
+        reactiveData:true, //enable data reactivity
+        layout:"fitColumns",
+        columns:[
+          {title:"No.", field:"no", hozAlign:"center"},
+          {title:"Order No.", field:"order_id",formatter:function(cell, formatterParams, onRendered){
+              var cellElement = cell.getElement();
+              var row = cell.getRow();
+              var rowData = row.getData();
+              cellElement.style.color = '#8cc63e';
+              return '<a href="javascript:;">'+cell.getValue()+'</a><span class="date-time">'+rowData.created_at+'</span>';
+          }},
+          {title:"Buyer", field:"buyer"},
+          {title:"Game", field:"game"},
+          {title:"Amount (package)", field:"quantity", hozAlign:"center"},
+          {title:"Commission", field:"commission", formatter:"money", hozAlign:"center", formatterParams:{
+              decimal:".",
+              thousand:",",
+              symbol:"$",
+              symbolAfter:"p",
+              negativeSign:true,
+              precision:false,
+          }},
+          {title:"Status", field:"status", hozAlign:"center"},
+          {title:"Note", field:"description",formatter:function(cell, formatterParams, onRendered){
+              var cellElement = cell.getElement();
+              cellElement.style.color = '#8cc63e';
+              return cell.getValue();
+          }},
+        ],
+      });
+    });
+
+    }
+  },
+  created(){
+    this.filterAffiliate();
+  }
+});
+
+
 // Add account form
 var addAccountForm = new AjaxFormSubmit({element: 'form#add-account-form'});
 addAccountForm.success = function (data, form) {

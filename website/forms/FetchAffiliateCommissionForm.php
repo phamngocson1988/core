@@ -10,6 +10,9 @@ class FetchAffiliateCommissionForm extends Model
     public $user_id;
     public $start_date;
     public $end_date;
+    public $customer_name;
+    public $game_title;
+    public $order_id;
     public $status;
 
     private $_command;
@@ -18,6 +21,16 @@ class FetchAffiliateCommissionForm extends Model
     {
         $command = AffiliateCommission::find()
         ->where(['user_id' => $this->user_id]);
+
+        if ($this->order_id) {
+            $command->andWhere(["order_id" => $this->order_id]);
+        }
+        if ($this->customer_name) {
+            $command->andWhere(["LIKE", "customer_name", $this->customer_name]);
+        }
+        if ($this->game_title) {
+            $command->andWhere(["LIKE", "game_title", $this->game_title]);
+        }
 
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);

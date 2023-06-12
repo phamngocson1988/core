@@ -86,6 +86,8 @@ class CreateAffiliateCommissionForm extends ActionForm
             'user_id' => $user->affiliated_with,
             'commission' => $commissionValue,
             'order_id' => $order->id,
+            'customer_name' => $order->customer_name,
+            'game_title' => $order->game_title,
             'member_id' => $user->id,
             'description' => sprintf('Affiliate commssion from %s (%s)', $user->getName(), $user->id),
             'created_at' => $now,

@@ -174,4 +174,34 @@ class AffiliateController extends Controller
         }
     }
 
+    // New method to serve axios request
+    public function actionFetch()
+    {
+        $request = Yii::$app->request;
+        $condition = $request->post('condition');
+        $affiliateCommissionForm = new \website\forms\FetchAffiliateCommissionForm([
+            'user_id' => Yii::$app->user->id,
+            'start_date' => $condition['start_date'],
+            'end_date' => $condition['end_date'],
+            'customer_name' => $condition['customer_name'],
+            'game_title' => $condition['game_title'],
+            'order_id' => $condition['order_id'],
+        ]);
+        $affiliateCommissionCommand = $affiliateCommissionForm->getCommand();
+        $commissions = $affiliateCommissionCommand->all();
+        $commissionData = array_map(function($item) {
+            $order = $item->order;
+            return [
+                "order_id" => '#' . $item->order_id,
+                "buyer" => $order->customer_name,
+                "game" => $order->game_title,
+                "quantity" => $order->quantity,
+                "commission" => $item->commission,
+                "status" => $item->getStatusLabel(),
+                "description" => $item->description,
+                "created_at" => $item->created_at
+            ];
+        }, $commissions);
+        return $this->asJson(['items' => $commissionData, 'condition' => $condition]);
+    }
 }
