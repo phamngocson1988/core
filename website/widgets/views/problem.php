@@ -33,7 +33,7 @@ use yii\helpers\Url;
         <div class="forgot-password" style="display: none">
           <p><b>Find your registered email</b> - Enter your mobile number</p>
           <?php $phoneform = ActiveForm::begin(['action' => $phoneUrl, 'id' => $phoneFormId]); ?>
-            <?= $phoneform->field($phoneModel, 'phone', ['inputOptions' => ['placeholder' => 'Phone']])->widget(\website\widgets\PhoneInputWidget::class)->label(false)->hint('<span id="email_suggestion" style="color: #3ab54a"></span>');?>
+            <?= $phoneform->field($phoneModel, 'phone', ['inputOptions' => ['placeholder' => 'Phone']])->widget(\website\widgets\PhoneInputWidget::class, ['country_code_id' => 'problem-phone-id'])->label(false)->hint('<span id="email_suggestion" style="color: #3ab54a"></span>');?>
             <div class="form-group">
               <button type="submit" class="btn btn-primary btn-lg btn-block login-btn text-uppercase">find email</button>
             </div>

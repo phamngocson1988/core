@@ -132,7 +132,7 @@ class SiteController extends Controller
             if ($request->get('affiliate')) {
                 Yii::$app->session->set('affiliate', $request->get('affiliate'));
             }
-            return $this->redirect(['site/index']);
+            return $this->redirect(['site/register']);
         }
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $model = new SignupForm();

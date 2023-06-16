@@ -28,9 +28,9 @@ use yii\helpers\Url;
                             <div class="text-horizontal"><span>or</span></div>
                             
                             <?php $form = ActiveForm::begin(['action' => Url::to(['site/signup']), 'id' => 'signup-form']);?>
-                            <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'Email', 'required' => 'required'])->label(false) ?>
-                            <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'required' => 'required'])->label(false) ?>
-                            <?= $form->field($model, 'phone', ['inputOptions' => ['placeholder' => 'Phone']])->widget(\website\widgets\PhoneInputWidget::class)->label(false);?>
+                            <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'Email', 'required' => 'required', 'id' => 'signup-form-email'])->label(false) ?>
+                            <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'required' => 'required', 'id' => 'signup-form-password'])->label(false) ?>
+                            <?= $form->field($model, 'phone', ['inputOptions' => ['placeholder' => 'Phone', 'id' => 'signup-form-phone']])->widget(\website\widgets\PhoneInputWidget::class, ['country_code_id' => 'signup-form-country_code'])->label(false);?>
                                 <div class="text-center mt-5">
                                 <button type="submit" class="btn btn-lg">Register</button>
                                 </div>
@@ -44,3 +44,28 @@ use yii\helpers\Url;
         </div>
     </div>
 </div>
+<?php
+$profileUrl = Url::to(['profile/index', '#' => 'modalSecure']);
+$script = <<< JS
+
+$('html').on('submit', 'form#signup-form', function() {
+    var form = $(this);
+    $.ajax({
+        url: '/signup.html',
+        type: 'post',
+        dataType : 'json',
+        data: form.serialize(),
+        success: function (result, textStatus, jqXHR) {
+            if (result.status == false) {
+                toastr.error(result.errors);
+                return false;
+            } else {
+                window.location.href = '$profileUrl';
+            }
+        },
+    });
+    return false;
+});
+JS;
+$this->registerJs($script);
+?>
