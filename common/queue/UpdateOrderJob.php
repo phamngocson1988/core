@@ -35,6 +35,20 @@ class UpdateOrderJob extends BaseObject implements \yii\queue\JobInterface
                     $this->handleQueueError($errors);
                 }
             }
+            if ($order->status !== $oldOrder->status && $order->reseller_id) {
+                // Send notification to wings
+                $key = "order_data:${$order->id}:status";
+                $value = [
+                    'server_order_id' => $order->id,
+                    'quantity' => $order->quantity,
+                    'processed_quantity' => $order->doing_unit,
+                    'note' => $order->note,
+                    'status' => $order->status,
+                    'updated_by' => 1,
+                    'completed_at' => $order->completed_at
+                ];
+                Yii::$app->redis->set($key, json_encode($value));
+            }
         } catch (\Exception $e) {
             $this->handleLog("fail process $e->getMessage()");
         }
