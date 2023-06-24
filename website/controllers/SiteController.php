@@ -45,7 +45,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term', 'request-access'],
+                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term', 'request-access', 'register'],
                         'allow' => true,
                     ],
                     [
@@ -132,7 +132,7 @@ class SiteController extends Controller
             if ($request->get('affiliate')) {
                 Yii::$app->session->set('affiliate', $request->get('affiliate'));
             }
-            return $this->redirect(['site/index']);
+            return $this->redirect(['site/register']);
         }
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $model = new SignupForm();
@@ -235,6 +235,12 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
         return $this->goHome();
+    }
+
+    public function actionRegister()
+    {
+        $signupForm = new \website\forms\SignupForm();
+        return $this->render('register', ['model' => $signupForm]);
     }
 
     public function actionTerm($slug)

@@ -45,7 +45,8 @@
         "alexandernst/yii2-device-detect": "0.0.12",
         "yiisoft/yii2-authclient": "~2.1.0",
         "coinbase/coinbase-commerce": "^1.0",
-        "firebase/php-jwt": "^5.2"
+        "firebase/php-jwt": "^5.2",
+        "yiisoft/yii2-redis": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
