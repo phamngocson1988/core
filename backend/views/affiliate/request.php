@@ -52,9 +52,8 @@ use common\components\helpers\FormatConverter;
           </div>
         </div>
       </div>
-      <div class="portlet-body">
-        <?php Pjax::begin(); ?>
-        <table class="table table-striped table-bordered table-hover table-checkable">
+      <div class="table-responsive">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th style="width: 5%;"> STT </th>
@@ -95,7 +94,6 @@ use common\components\helpers\FormatConverter;
           </tbody>
         </table>
         <?=LinkPager::widget(['pagination' => $pages])?>
-        <?php Pjax::end(); ?>
       </div>
     </div>
     <!-- END EXAMPLE TABLE PORTLET-->
