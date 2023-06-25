@@ -25,7 +25,7 @@ class NotifyOrderMessageJob extends BaseObject implements \yii\queue\JobInterfac
         try {
             $order = $this->getOrder();
             $message = $this->getMessage();
-            $sender = $message->getSender();
+            $sender = $message->sender;
             if ($order->is_reseller) {
                 $key = sprintf("order_data:%s:messages:%s", $order->id, $message->id);
                 $value = [
