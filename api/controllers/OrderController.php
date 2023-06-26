@@ -25,7 +25,8 @@ class OrderController extends Controller
                 'move-to-confirmed' => ['post'],
                 'create' => ['post'],
                 'pay' => ['post'],
-                'test' => ['get'],
+                'view' => ['get'],
+                'views' => ['post'],
             ],
         ];
 	    return $behaviors;
@@ -41,6 +42,14 @@ class OrderController extends Controller
             throw new NotFoundHttpException('order does not exist.');
         }
 		return $order;
+	}
+
+    public function actionViews()
+	{
+        $request = Yii::$app->request;
+        $ids = $request->post('ids', []);
+		$orders = Order::find()->where(['id' => $ids, 'customer_id' => Yii::$app->user->id])->all();
+		return $orders;
 	}
 
 	public function actionCancel($id)
