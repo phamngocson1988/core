@@ -6,6 +6,7 @@ use yii\rest\Controller;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use api\models\Order;
 
 class OrderController extends Controller
@@ -186,6 +187,7 @@ class OrderController extends Controller
             $code = $generateLinkForm->generate();
             if ($code) {
                 $paymentLink = sprintf('%s/%s.html?token=%s', Yii::$app->params['payment_url'], $code, $order->payment_token);
+                $paymentApi = Url::to(['wallet/purchase', 'token' => $order->payment_token], true);
                 $result['payment_link'] = $paymentLink;
             }
         }
