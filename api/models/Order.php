@@ -4,6 +4,7 @@ namespace api\models;
 use Yii;
 use api\behaviors\OrderNotificationBehavior;
 use api\behaviors\OrderComplainBehavior;
+use common\models\OrderFile;
 
 class Order extends \common\models\Order
 {
@@ -45,6 +46,18 @@ class Order extends \common\models\Order
             'reseller_id',
             'game' => function ($model) {
             	return $model->game;
+            },
+            'evidence_before' => function($model) {
+                $images = $model->getEvidencesByType(OrderFile::TYPE_EVIDENCE_BEFORE);
+                return array_map(function($image) {
+                    return $image->getUrl();
+                }, $images);
+            },
+            'evidence_after' => function($model) {
+                $images = $model->getEvidencesByType(OrderFile::TYPE_EVIDENCE_AFTER);
+                return array_map(function($image) {
+                    return $image->getUrl();
+                }, $images);
             },
         ];
     }
