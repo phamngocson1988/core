@@ -20,6 +20,7 @@ return [
         'checkout/<id:\d+>' => 'cart/checkout',
         'wallet/calculate' => 'wallet/calculate',
         'wallet/purchase' => 'wallet/purchase',
+        'wallet/paygates' => 'wallet/paygates',
         'test-order/<id:\d+>' => 'order/test',
     ],
 ];

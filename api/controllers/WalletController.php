@@ -7,7 +7,7 @@ use yii\filters\auth\HttpBearerAuth;
 
 // models
 use common\components\helpers\StringHelper;
-use common\models\Paygate;
+use api\models\Paygate;
 use common\models\PaymentTransaction;
 use common\models\CurrencySetting;
 use common\models\Order;
@@ -21,6 +21,11 @@ class WalletController extends Controller
             'class' => HttpBearerAuth::className(),
         ];
         return $behaviors;
+    }
+
+    public function actionPaygates()
+    {
+        return Paygate::find()->where(['status' => Paygate::STATUS_ACTIVE])->all();
     }
 
     public function actionCalculate() 
