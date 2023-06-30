@@ -109,9 +109,6 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
                 </tr>
               </thead>
               <tbody>
-                <?php if (!$wallets) : ?>
-                <tr><td colspan="4" class="text-center">No data found</td></tr>
-                <?php endif;?>
                 <?php foreach ($wallets as $no => $wallet) : ?>
                 <tr>
                   <td scope="row">
@@ -147,15 +144,12 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
                 </tr>
               </thead>
               <tbody>
-                <?php if (!$pendings) : ?>
-                <tr><td colspan="7" class="text-center">No data found</td></tr>
-                <?php endif;?>
                 <?php foreach ($pendings as $pending) : ?>
                 <tr>
-                  <th scope="row">
+                  <td scope="row">
                     <a href="javascript:;" class="view-detail" data-id="<?=$pending->id;?>"><?=$pending->getId();?></a>
                     <span class="date-time"><?=$pending->created_at;?></span>
-                  </th>
+                  </td>
                   <td><?=$pending->payment_method;?></td>
                   <td class="text-center"><span class="text-red"><?=StringHelper::numberFormat($pending->total_coin, 2);?> KC</span></td>
                   <td class="text-center"><?=$pending->status;?></td>

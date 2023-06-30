@@ -83,7 +83,8 @@ class OrderController extends Controller
             'user_sublink_id' => $user_sublink_id,
             'is_customer' => $is_customer ? 'Y' : 'N'
         ]);
-        if (!$form->create()) {
+        $complain = $form->create();
+        if (!$complain) {
             $message = $form->getFirstErrors();
             $message = reset($message);
             return [
@@ -91,7 +92,7 @@ class OrderController extends Controller
                 'error' => $message
             ];
         }
-        return ['status' => true];
+        return ['status' => true, 'id' => $complain->id];
     }
 
     public function actionListComplain($id)
