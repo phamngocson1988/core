@@ -33,6 +33,18 @@ class PaymentTransaction extends ActiveRecord
         ];
     }
 
+    public function init()
+    {
+        parent::init();
+        // Hook message queue to EVENT_AFTER_UPDATE
+        $this->on(self::EVENT_AFTER_UPDATE, function ($event) {
+            Yii::$app->queue->push(new \common\queue\UpdatePaymentTransactionJob([
+                'payment_transaction' => $event->sender->toArray(),
+                'changedAttributes' => $event->changedAttributes
+            ]));
+        });
+    }
+
 	public static function tableName()
     {
         return '{{%payment_transaction}}';

@@ -65,61 +65,38 @@ class WalletController extends Controller
     {
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
-        $form = new \payment\forms\WalletPaymentForm([
+        $form = new \website\forms\WalletPaymentForm([
             'quantity' => $request->post('quantity', 0),
             'paygate' => $request->post('paygate'),
-            'remark' => $request->post('name'),
-            'token' => $request->get('token')
         ]);
 
         if ($form->validate() && $trnId = $form->purchase()) {
             $paygate = $form->getPaygate();
             $trn = PaymentTransaction::findOne($trnId);
-            $trn->save();
             $url = $paygate->createCharge($trn, $user);
-            return $this->asJson(['status' => true, 'data' => $trnId, 'url' => $url]);
+            $trn = PaymentTransaction::findOne($trnId);
+            $data = $trn->payment_data ? json_decode($trn->payment_data, true) : null;
+            return $this->asJson(['status' => true, 'data' => $data, 'trnId' => $trnId]);
         } else {
             return $this->asJson(['status' => false, 'errors' => $form->getErrorSummary(true)]);
         }
     }
 
-    public function actionUpdate()
+    public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $id = $request->get('id');
-        $model = new \website\forms\UpdateTransactionForm(['id' => $id]);
-        if ($model->load($request->post())) {
-            $files = Yii::$app->file->upload('evidence', "evidence/$id", true);
-            if ($files) {
-                $inputFile = reset($files);
-                $model->evidence = $inputFile;
-            }
-            if ($model->validate() && $model->update()) {
-                $transaction = $model->getTransaction();
-                $user = Yii::$app->user->getIdentity();
-                $tId = $transaction->getId();
-                // Sending email
-                $emailHelper = new \common\components\helpers\MailHelper();
-                $emailHelper
-                ->setMailer(Yii::$app->mailer)
-                ->usingCustomerService()
-                ->usingKinggemsSiteName()
-                ->send(
-                    sprintf("Deposit Notification [%s - %s]", $transaction->remark, $transaction->total_price),
-                    $user->email,
-                    'notify',
-                    [
-                        'transaction' => $transaction,
-                        'user' => $user
-                    ]
-                );
-                
-                return $this->asJson(['status' => true, 'message' => sprintf("Thanks for shopping with us. Your payment is on processing. Kindly save your tracking number: %s", $tId), 'id' => $tId]);
-            } else {
-                $errors = $model->getErrorSummary(true);
-                $error = reset($errors);
-                return $this->asJson(['status' => false, 'errors' => $error]);
-            }
+        $model = new \website\forms\UpdateTransactionForm([
+            'id' => $id,
+            'payment_id' => $request->post('payment_id'),
+            'payment_data' => $request->post('payment_data'),
+            'evidence' => $request->post('evidence'),
+        ]);
+        if ($model->validate() && $model->update()) {
+            return $this->asJson(['status' => true]);
+        } else {
+            $errors = $model->getErrorSummary(true);
+            $error = reset($errors);
+            return $this->asJson(['status' => false, 'errors' => $error]);
         }
     }
 }

@@ -21,6 +21,7 @@ return [
         'wallet/calculate' => 'wallet/calculate',
         'wallet/purchase' => 'wallet/purchase',
         'wallet/paygates' => 'wallet/paygates',
+        'wallet/update/<id:\d+>' => 'wallet/update',
         'test-order/<id:\d+>' => 'order/test',
     ],
 ];
