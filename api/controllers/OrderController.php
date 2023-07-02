@@ -146,7 +146,7 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
         $item = \api\components\cart\CartItem::findOne($id);
-        $item->setScenario(\api\components\cart\CartItem::SCENARIO_ADD_CART);
+        $item->setScenario(\api\components\cart\CartItem::SCENARIO_BULK_CART);
         $item->quantity = $request->post('quantity');
         $item->username = $request->post('username');
         $item->password = $request->post('password');
@@ -154,6 +154,8 @@ class OrderController extends Controller
         $item->recover_code = $request->post('recover_code');
         $item->server = $request->post('server');
         $item->note = $request->post('note');
+        $item->raw = $request->post('raw');
+        $item->bulk = strtotime('now');
         $item->login_method = $request->post('login_method');
         if (!$item->validate()) {
             $message = $item->getErrorSummary(true);

@@ -12,7 +12,7 @@ class Paygate extends \common\models\Paygate
             'name',
             'identifier',
             'paygate_type',
-            // 'content',
+            'content',
             'logo' => function($model) {
                 return $model->getImageUrl();
             },

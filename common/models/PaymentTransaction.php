@@ -39,7 +39,7 @@ class PaymentTransaction extends ActiveRecord
         // Hook message queue to EVENT_AFTER_UPDATE
         $this->on(self::EVENT_AFTER_UPDATE, function ($event) {
             Yii::$app->queue->push(new \common\queue\UpdatePaymentTransactionJob([
-                'payment_transaction' => $event->sender->toArray(),
+                'model' => $event->sender->toArray(),
                 'changedAttributes' => $event->changedAttributes
             ]));
         });
