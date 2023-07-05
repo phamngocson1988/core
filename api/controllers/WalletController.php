@@ -68,6 +68,7 @@ class WalletController extends Controller
         $form = new \website\forms\WalletPaymentForm([
             'quantity' => $request->post('quantity', 0),
             'paygate' => $request->post('paygate'),
+            'remark' => $request->post('name')
         ]);
 
         if ($form->validate() && $trnId = $form->purchase()) {

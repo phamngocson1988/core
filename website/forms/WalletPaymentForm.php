@@ -20,6 +20,7 @@ class WalletPaymentForm extends Model
     public $quantity;
     public $voucher;
     public $paygate;
+    public $remark;
 
     protected $_paygate;
     protected $_promotion;
@@ -28,7 +29,7 @@ class WalletPaymentForm extends Model
     {
         return [
             [['quantity', 'paygate'], 'required'],
-            [['voucher'], 'trim'],
+            [['voucher', 'remark'], 'trim'],
             ['quantity', 'compare', 'compareValue' => 0, 'operator' => '>', 'type' => 'number'],
             ['paygate', 'validatePaygate'],
             ['voucher', 'validateVoucher']
@@ -150,6 +151,7 @@ class WalletPaymentForm extends Model
             $trn->payment_type = $paygate->getPaymentType();
             $trn->payment_content = $paygate->content;
             $trn->rate_usd = $rate;
+            $trn->remark = $this->remark;
             // Price
             $trn->price = $data['subTotalPayment'];
             $trn->discount_price = 0;
