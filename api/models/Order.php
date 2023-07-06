@@ -42,6 +42,8 @@ class Order extends \common\models\Order
 			'server',
 			'note',
 			'login_method',
+			'raw',
+            'bulk',
             'order_from_sublink',
             'reseller_id',
             'game' => function ($model) {

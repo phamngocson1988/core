@@ -148,15 +148,15 @@ class OrderController extends Controller
         $item = \api\components\cart\CartItem::findOne($id);
         $item->setScenario(\api\components\cart\CartItem::SCENARIO_BULK_CART);
         $item->quantity = $request->post('quantity');
-        $item->username = $request->post('username');
-        $item->password = $request->post('password');
-        $item->character_name = $request->post('character_name');
-        $item->recover_code = $request->post('recover_code');
-        $item->server = $request->post('server');
-        $item->note = $request->post('note');
+        // $item->username = $request->post('username');
+        // $item->password = $request->post('password');
+        // $item->character_name = $request->post('character_name');
+        // $item->recover_code = $request->post('recover_code');
+        // $item->server = $request->post('server');
+        // $item->note = $request->post('note');
+        // $item->login_method = $request->post('login_method');
         $item->raw = $request->post('raw');
         $item->bulk = strtotime('now');
-        $item->login_method = $request->post('login_method');
         if (!$item->validate()) {
             $message = $item->getErrorSummary(true);
             $message = reset($message);
