@@ -98,7 +98,7 @@ class DispatchOrderForm extends ActionForm
         return true;
     }
 
-    protected function getOrder()
+    public function getOrder()
     {
         if (!$this->_order) {
             $this->_order = Order::findOne($this->id);

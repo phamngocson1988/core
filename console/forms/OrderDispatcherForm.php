@@ -25,7 +25,14 @@ class OrderDispatcherForm extends ActionForm
 
         foreach ($orderIds as $orderId) {
             $form = new DispatchOrderForm(['id' => $orderId]);
-            $form->dispatch();
+            if (!$form->dispatch()) {
+                $order = $form->getOrder();
+                $errors = $form->getErrors();
+                $order->log(sprintf("Dispatch order %s fail: %s", $order->id, json_encode($errors)));
+            } else {
+                $order = $form->getOrder();
+                $order->log(sprintf("Dispatch order %s success", $order->id));
+            }
         }
         return true;
     }
