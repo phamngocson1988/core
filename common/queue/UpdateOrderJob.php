@@ -67,7 +67,8 @@ class UpdateOrderJob extends BaseObject implements \yii\queue\JobInterface
     protected function handleQueueError($errors)
     {
         $track = new Tracking();
-        $description = sprintf("CreateAffiliateComission %s fail %s", $this->order->id, json_encode($errors));
+        $order = $this->getOrder();
+        $description = sprintf("CreateAffiliateComission %s fail %s", $order->id, json_encode($errors));
         print_r($description);
 
         $track->description = $description;
