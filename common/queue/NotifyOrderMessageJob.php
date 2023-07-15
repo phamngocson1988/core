@@ -26,7 +26,7 @@ class NotifyOrderMessageJob extends BaseObject implements \yii\queue\JobInterfac
             $order = $this->getOrder();
             $message = $this->getMessage();
             $sender = $message->sender;
-            if ($order->is_reseller) {
+            if ($order->reseller_id) {
                 $key = sprintf("order_data:%s:messages:%s", $order->id, $message->id);
                 $value = [
                     'id' => $message->id,
@@ -42,6 +42,7 @@ class NotifyOrderMessageJob extends BaseObject implements \yii\queue\JobInterfac
                 Yii::$app->redis->set($key, json_encode($value));
             }
         } catch (\Exception $e) {
+            echo $e->getMessage();
             $this->handleLog("fail process $e->getMessage()");
         }
     }
