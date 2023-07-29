@@ -51,7 +51,7 @@ class UpdatePaymentTransactionJob extends BaseObject implements \yii\queue\JobIn
     protected function handleLog($data)
     {
         $track = new Tracking();
-        $description = sprintf("CreateAffiliateComission: %s", $data);
+        $description = sprintf("%s: %s", __CLASS__, $data);
         $track->description = $description;
         $track->save();
     }

@@ -1,11 +1,12 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <P>Dear <?=$userName;?>,</P>
-    We would like to inform that your balance has just been changed as detailed below:<br/>
+    We would like to inform that your balance has just been changed with details, below:<br/>
     - Balance before: <?=$balanceBefore;?><br/>
     - Balance after: <?=$balanceAfter;?><br/>
     - Amount changed: <?=$balanceChanged;?><br/>
     + Reason: <?=$reason;?><br/>
+    Feel free to inquire more details on chat!<br/>
     <hr>
   </td>
 </tr>

@@ -1,11 +1,12 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <P>Dear <?=$order->customer_name;?>,</P>
-    Your order has been completed, the following details:<br/>
+    Congrats!<br/>
+    Your order is completed, the following details:<br/>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
     + Game: <?=$order->game_title;?><br/>
     + Quantity: <?=number_format($order->total_unit);?> <?=$order->unit_name;?><br/>
-    Kindly check order details and and click on <span style="font-weight:bold;">“ CONFIRM DELIVERY “</span> if you have received goods enough as ordered.
+    Kindly check on website and and click on <span style="font-weight:bold;">“ CONFIRM DELIVERY “</span> if everything is good.
   </td>
 </tr>
 <tr>

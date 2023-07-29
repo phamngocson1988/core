@@ -1,8 +1,7 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <P>Dear <?=$order->customer_name;?>,</P>
-    <p>We would like to inform that:</p>
-    <p>Your order has been cancelled.</p>
+    <p>Kindly be informed that your order has been cancelled, with details:</p>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
     + Reason: Buyer's favor<br/>
     <p>Please be noted that the service charge has been refunded to your wallet accordingly.</p>

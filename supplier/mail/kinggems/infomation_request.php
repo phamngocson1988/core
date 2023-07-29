@@ -1,7 +1,8 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
-    <P>Dear <?=$user->name;?>,</P>
-    <p>Please be informed that you have received a request for additional information regarding order with details below:</p>
+  <P>Dear <?=$user->name;?>,</P>
+  <P>URGENT!</P>
+  <p>We really need your support regarding the provided information. Kindly check and support futher</p>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
     + Request: <?=$message;?><br/>
   </td>

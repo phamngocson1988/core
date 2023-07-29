@@ -60,7 +60,7 @@ class NotifyOrderMessageJob extends BaseObject implements \yii\queue\JobInterfac
     protected function handleQueueError($errors)
     {
         $track = new Tracking();
-        $description = sprintf("CreateAffiliateComission %s fail %s", $this->order->id, json_encode($errors));
+        $description = sprintf("%s %s fail %s", __CLASS__, $this->order->id, json_encode($errors));
         print_r($description);
 
         $track->description = $description;
@@ -70,7 +70,7 @@ class NotifyOrderMessageJob extends BaseObject implements \yii\queue\JobInterfac
     protected function handleLog($data)
     {
         $track = new Tracking();
-        $description = sprintf("CreateAffiliateComission: %s", $data);
+        $description = sprintf("%s: %s", __CLASS__, $data);
         $track->description = $description;
         $track->save();
     }

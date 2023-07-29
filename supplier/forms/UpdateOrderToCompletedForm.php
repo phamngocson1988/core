@@ -146,6 +146,7 @@ class UpdateOrderToCompletedForm extends Model
                     Yii::$app->urlManagerFrontend->setHostInfo(Yii::$app->params['frontend_url']);
                     $sender->log("Moved to completed");
                     $sender->pushNotification(OrderNotification::NOTIFY_CUSTOMER_COMPLETE_ORDER, $sender->customer_id);
+                    Yii::$app->queue->push(new \common\queue\PaySupplierByOrderJob(['id' => $sender->id]));
                 });
             } else {
                 $order->status = Order::STATUS_PARTIAL;

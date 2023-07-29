@@ -68,7 +68,7 @@ class UpdateOrderJob extends BaseObject implements \yii\queue\JobInterface
     {
         $track = new Tracking();
         $order = $this->getOrder();
-        $description = sprintf("CreateAffiliateComission %s fail %s", $order->id, json_encode($errors));
+        $description = sprintf("%s %s fail %s", __CLASS__, $order->id, json_encode($errors));
         print_r($description);
 
         $track->description = $description;
@@ -78,7 +78,7 @@ class UpdateOrderJob extends BaseObject implements \yii\queue\JobInterface
     protected function handleLog($data)
     {
         $track = new Tracking();
-        $description = sprintf("CreateAffiliateComission: %s", $data);
+        $description = sprintf("%s: %s", __CLASS__, $data);
         $track->description = $description;
         $track->save();
     }

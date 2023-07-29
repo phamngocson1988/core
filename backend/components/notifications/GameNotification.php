@@ -42,7 +42,7 @@ class GameNotification extends Notification
         $game = $this->game;
         switch($this->key) {
             case self::NOTIFY_NEW_PRICE:
-                return sprintf("Game %s price has been updated", $game->title);
+                return sprintf("Kindly be informed that your game: %s, the price has been updated. Please check!", $game->title);
             case self::NOTIFY_IN_STOCK:
                 return sprintf("Game %s is in-stock now", $game->title);
             case self::NOTIFY_OUT_STOCK:
