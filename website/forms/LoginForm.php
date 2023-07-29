@@ -98,7 +98,7 @@ class LoginForm extends Model
                         return Yii::$app->user->login($user, $this->rememberMe ? 3600 * 24 * 30 : 0);
                     } else {
                         $verifyService = new Email();
-                        return $verifyService->send($user->email, 'Kinggems.us: Your verification code is {pin}');
+                        return $verifyService->send($user->email, 'Kinggems.us: Your verification code is {pin}.');
                     }
                 case self::SCENARIO_VERIFY:
                     if ($this->rememberMe) {

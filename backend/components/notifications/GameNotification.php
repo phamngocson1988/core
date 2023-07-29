@@ -108,7 +108,7 @@ class GameNotification extends Notification
             case self::NOTIFY_IN_STOCK:
             case self::NOTIFY_OUT_STOCK:
             case self::NOTIFY_NEW_PROMOTION_FOR_GAME:
-                $subject = sprintf('King Gems - #%s - Game Notification', $game->title);
+                $subject = sprintf('KingGems - #%s - Game Notification', $game->title);
                 $description = $this->getDescription();
                 $template = 'game_notification';
                 $fromEmail = $kinggemsMail;

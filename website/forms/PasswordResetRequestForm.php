@@ -54,7 +54,7 @@ class PasswordResetRequestForm extends Model
             )
             ->setFrom([$adminEmail => Yii::$app->name])
             ->setTo($this->email)
-            ->setSubject('Reset password Kinggems')
+            ->setSubject('KingGems- Reset password request')
             ->send();
     }
 }

@@ -103,7 +103,7 @@ class CreateCustomerForm extends Model
     {
         $settings = Yii::$app->settings;
         $mailer = Yii::$app->mailer;
-        $subject = sprintf('King Gems - New account is created');
+        $subject = sprintf('KingGems - Welcome!!!');
         $template = 'invite_customer';
         $fromEmail = $settings->get('ApplicationSettingForm', 'customer_service_email');
         $toEmail = $user->email;
