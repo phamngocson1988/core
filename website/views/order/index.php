@@ -82,6 +82,12 @@ $myOrderUrl = Url::to(['order/index']);
   <div class="d-flex bd-highlight justify-content-between align-items-center orders-history-wrapper mb-3">
     <p class="lead mb-0">Orders history</p>
 			<?php $form = ActiveForm::begin(['action' => ['order/index'], 'method' => 'get', 'options' => ['class' => 'd-flex ml-auto']]);?>
+      <?=$form->field($search, 'id', [
+				'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
+				'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],
+				'inputOptions' => ['class' => 'form-control', 'name' => 'id'],
+				'template' => '{label}{input}'
+			])->textInput()->label('Order ID');?>
 			<?=$form->field($search, 'start_date', [
 				'options' => ['class' => 'flex-fill d-flex align-items-center mr-3'],
 				'labelOptions' => ['class' => 'd-block w-100 mr-2 mb-0'],

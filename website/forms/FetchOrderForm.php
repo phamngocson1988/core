@@ -8,6 +8,7 @@ use website\models\Order;
 
 class FetchOrderForm extends Model
 {
+    public $id;
     public $customer_id;
     public $start_date;
     public $end_date;
@@ -19,7 +20,7 @@ class FetchOrderForm extends Model
     {
         return [
             ['customer_id', 'required'],
-            [['start_date', 'end_date', 'status'], 'safe']
+            [['id', 'start_date', 'end_date', 'status'], 'safe']
         ];
     }
     
@@ -33,6 +34,9 @@ class FetchOrderForm extends Model
     {
         $command = Order::find();
         $command->where(['customer_id' => $this->customer_id]);
+        if ($this->id) {
+            $command->andWhere(['id' => $this->id]);
+        }
         if ($this->start_date) {
             $command->andWhere(['>=', 'created_at', $this->start_date . " 00:00:00"]);
         }

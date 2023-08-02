@@ -46,6 +46,7 @@ class OrderController extends Controller
     	$verifyingOrders = $verifyingForm->getCommand()->all();
 
     	$form = new FetchOrderForm([
+    		'id' => $request->get('id'),
     		'customer_id' => $userId,
             'status' => $request->get('status'),
             'start_date' => $request->get('start_date'),
