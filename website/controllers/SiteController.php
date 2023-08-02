@@ -49,7 +49,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['signup', 'login', 'request-password-reset', 'reset-password', 'request-email-reset'],
+                        'actions' => ['signup', 'login', 'signin', 'request-password-reset', 'reset-password', 'request-email-reset'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -103,7 +103,7 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionLogin()
+    public function actionSignin()
     {
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
@@ -241,6 +241,19 @@ class SiteController extends Controller
     {
         $signupForm = new \website\forms\SignupForm();
         return $this->render('register', ['model' => $signupForm]);
+    }
+
+    public function actionLogin()
+    {
+        $loginForm = new LoginForm();
+        $loginScenario = LoginForm::SCENARIO_LOGIN;
+        $verifyScenario = LoginForm::SCENARIO_VERIFY;
+        return $this->render('login', [
+            'model' => $loginForm,
+            'scenario' => LoginForm::SCENARIO_LOGIN,
+            'loginScenario' => $loginScenario,
+            'verifyScenario' => $verifyScenario,
+        ]);
     }
 
     public function actionTerm($slug)

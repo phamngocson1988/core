@@ -31,11 +31,15 @@ use yii\helpers\Url;
                             <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'Email', 'required' => 'required', 'id' => 'signup-form-email'])->label(false) ?>
                             <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'required' => 'required', 'id' => 'signup-form-password'])->label(false) ?>
                             <?= $form->field($model, 'phone', ['inputOptions' => ['placeholder' => 'Phone', 'id' => 'signup-form-phone']])->widget(\website\widgets\PhoneInputWidget::class, ['country_code_id' => 'signup-form-country_code'])->label(false);?>
-                                <div class="text-center mt-5">
-                                <button type="submit" class="btn btn-lg">Register</button>
+                            <div class="form-group mt-3">
+                                <button type="submit" id="submit" class="btn btn-primary btn-lg btn-block login-btn text-uppercase" style="background:#fe0000;">Register</button>
                                 </div>
-                            <?php ActiveForm::end(); ?>
-                            </div>
+
+                                <?php ActiveForm::end(); ?>
+                                </div>
+                                <div class="text-center">
+                                <p>Already a member?<a href="<?=Url::to(['site/login']);?>"  style="cursor: pointer;"> Login here</a></p>
+                                </div>
                             </div>
                         </div>
                     </div>
