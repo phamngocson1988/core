@@ -147,8 +147,8 @@ class OrderNotification extends Notification
 
         switch($this->key) {
             case self::NOTIFY_CUSTOMER_PENDING_ORDER:
-                $subject = sprintf('King Gems - #%s - Order Confirmed', $this->order->id);
-                $template = 'order_confirmed';
+                $subject = sprintf('KingGems - #%s - Pending', $this->order->id);
+                $template = 'order_pending';
                 $fromEmail = $kinggemsMail;
                 $mailer = $kinggemsMailer;
                 break;

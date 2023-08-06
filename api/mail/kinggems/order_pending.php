@@ -1,9 +1,8 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <P>Dear <?=$order->customer_name;?>,</P>
-    We would like to inform that your order has been confirmed.
+    We would like to inform that your payment has been approved. So your order is ready to be processed now.
     <hr>
-    <p>The order is processd with following details:</p>
     + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
     + Game: <?=$order->game_title;?><br/>
     + Quantity / loaded amount: <?=number_format($order->quantity, 1);?><br/>
