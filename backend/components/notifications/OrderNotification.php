@@ -174,8 +174,8 @@ class OrderNotification extends Notification
                 $data['detailUrl'] = Yii::$app->urlManagerSupplier->createAbsoluteUrl(['order/edit', 'id' => $supplierOrder->id], true);
                 break;
             case self::NOTIFY_CUSTOMER_PENDING_ORDER:
-                $subject = sprintf('KingGems - #%s - Order Confirmed', $this->order->id);
-                $template = 'order_confirmed';
+                $subject = sprintf('KingGems - #%s - Pending', $this->order->id);
+                $template = 'order_pending';
                 $fromEmail = $kinggemsMail;
                 $mailer = $kinggemsMailer;
                 break;
