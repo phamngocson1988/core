@@ -155,6 +155,7 @@ class SiteController extends Controller
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
         }
         $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'notifyStaff']);
+        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'welcome']);
 
         if ($model->load($request->post()) && $model->validate()) {
             $user = $model->signup();
