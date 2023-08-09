@@ -32,6 +32,27 @@ class UpdatePaymentTransactionJob extends BaseObject implements \yii\queue\JobIn
                     'status' => $newItem->status,
                 ];
                 Yii::$app->redis->set($key, json_encode($value));
+
+                // Send notification mail to customer
+                if ($newItem->isCompleted()) {
+                    $user = $newItem->user;
+                    $admin = Yii::$app->settings->get('ApplicationSettingForm', 'customer_service_email');
+                    $siteName = 'Kinggems Us';
+                    $after = $user->walletBalance();
+                    $before = $after - $newItem->total_coin;
+                    Yii::$app->mailer->compose('deposit_success', [
+                        'id' => $newItem->id,
+                        'name' => $user->getName(),
+                        'amount' => $newItem->total_coin,
+                        'before' => $before,
+                        'after' => $after
+                    ])
+                    ->setTo($user->email)
+                    ->setFrom([$admin => $siteName])
+                    ->setSubject('KingGems – Deposit Successfully')
+                    ->send();
+                }
+                
             }
         } catch (\Exception $e) {
             $this->handleLog("fail process $e->getMessage()");

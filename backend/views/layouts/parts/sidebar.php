@@ -303,18 +303,18 @@ use yii\helpers\Url;
         </a>
         <ul class="sub-menu">
           <li class="nav-item  ">
-            <a href="<?=Url::to(['ayment-transaction/index']);?>" class="nav-link " code='transaction.index'>
+            <a href="<?=Url::to(['payment-transaction/index']);?>" class="nav-link " code='transaction.index'>
             <span class="title">Tất cả</span>
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="<?=Url::to(['ayment-transaction/trash']);?>" class="nav-link " code='transaction.trash'>
+            <a href="<?=Url::to(['payment-transaction/trash']);?>" class="nav-link " code='transaction.trash'>
             <span class="title">Thùng rác</span>
             </a>
           </li>
 
           <li class="nav-item  ">
-            <a href="<?=Url::to(['ayment-reality/index']);?>" class="nav-link " code='payment_reality.index'>
+            <a href="<?=Url::to(['payment-reality/index']);?>" class="nav-link " code='payment_reality.index'>
             <span class="title">Hóa đơn nhận tiền</span>
             <?php if ($this->params['payment_reality']) : ?>
             <span class="badge badge-success"><?=$this->params['payment_reality'];?></span>
@@ -322,7 +322,7 @@ use yii\helpers\Url;
             </a>
           </li>
           <li class="nav-item  ">
-            <a href="<?=Url::to(['ayment-commitment/index']);?>" class="nav-link " code='payment_commitment.index'>
+            <a href="<?=Url::to(['payment-commitment/index']);?>" class="nav-link " code='payment_commitment.index'>
             <span class="title">Lịch sử giao dịch</span>
             <?php if ($this->params['payment_commitment']) : ?>
             <span class="badge badge-success"><?=$this->params['payment_commitment'];?></span>
