@@ -35,7 +35,7 @@ class UpdateOrderJob extends BaseObject implements \yii\queue\JobInterface
                 }
             }
             // Notify to wings when order status changed
-            if ($order->reseller_id) {
+            if ($order->reseller_id && $order->status !== $oldOrder->status) {
                 // Send notification to wings
                 $key = sprintf("order_data:%s:status", $order->id);
                 $value = [

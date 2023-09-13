@@ -495,7 +495,7 @@ use yii\helpers\Url;
             <span class="title">Đơn hàng</span>
             </a>
           </li>
-          <?php if (Yii::$app->user->can('saler') || $app->user->can('accounting')) : ?>
+          <?php if (Yii::$app->user->can('saler') || Yii::$app->user->can('accounting')) : ?>
           <?php endif;?>
           <li class="nav-item  ">
             <a href="<?=Url::to(['order/pending']);?>" class="nav-link " code='order.pending'>
@@ -544,7 +544,7 @@ use yii\helpers\Url;
             </a>
           </li>
           <?php endif;?>
-          <?php if (Yii::$app->user->can('accounting') || $app->user->can('saler')) : ?>
+          <?php if (Yii::$app->user->can('accounting') || Yii::$app->user->can('saler')) : ?>
           <li class="nav-item  ">
             <a href="<?=Url::to(['order-log/index']);?>" class="nav-link " code='order.log'>
             <span class="title">Log đơn hàng</span>
@@ -600,7 +600,7 @@ use yii\helpers\Url;
             </ul>
           </li>
           <?php endif;?>
-          <?php if (Yii::$app->user->can('sale_manager') || $app->user->can('orderteam')) : ?>
+          <?php if (Yii::$app->user->can('sale_manager') || Yii::$app->user->can('orderteam')) : ?>
           <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
               <span class="title">Thống kê thực hiện đơn hàng</span>
@@ -614,14 +614,14 @@ use yii\helpers\Url;
                 </a>
               </li>
               <?php endif;?>
-              <?php if (Yii::$app->user->can('sale_manager') || $app->user->can('orderteam_manager')) : ?>
+              <?php if (Yii::$app->user->can('sale_manager') || Yii::$app->user->can('orderteam_manager')) : ?>
               <li class="nav-item  ">
                 <a href="<?=Url::to(['report/process-game']);?>" class="nav-link nav-toggle" code="report.process.game">
                   <span class="title">Theo game</span>
                 </a>
               </li>
               <?php endif;?>
-              <?php if (Yii::$app->user->can('sale_manager') || $app->user->can('orderteam_manager')) : ?>
+              <?php if (Yii::$app->user->can('sale_manager') || Yii::$app->user->can('orderteam_manager')) : ?>
               <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                   <span class="title">Theo reseller</span>
