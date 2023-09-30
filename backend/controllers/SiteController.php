@@ -53,91 +53,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $command = Order::find()->where(['status' => Order::STATUS_CONFIRMED]);
-
-        $topCustomers = Order::find()
-        ->select(['customer_id', 'customer_name', 'sum(total_price) as total_price'])
-        ->where(['status' => Order::STATUS_CONFIRMED])
-        ->groupBy('customer_id')
-        ->orderBy('total_price desc')
-        ->limit(5)
-        ->asArray()
-        ->all();
-        $topGames = Order::find()
-        ->select(['game_id', 'game_title', 'sum(total_price) as total_price'])
-        ->where(['status' => Order::STATUS_CONFIRMED])
-        ->groupBy('game_id')
-        ->orderBy('total_price desc')
-        ->limit(5)
-        ->asArray()
-        ->all();
-        $data = [
-            'revenue' => $command->sum('total_price'),
-            'quantity' => $command->sum('quantity'),
-            'orders' => $command->count(),
-            'games' => $command->count('DISTINCT game_id'),
-            'customers' => $command->count('DISTINCT customer_id'),
-            'topCustomers' => $topCustomers,
-            'topGames' => $topGames
-        ];
-        return $this->render('index', $data);
+        return $this->render('index');
     }
 
 
     public function actionReportRevenue() 
     {
-        $command = Order::find()->where(['status' => Order::STATUS_CONFIRMED]);
-        $weekData = [12, 19, 3, 5, 2, 3, 10];
-        $monthData = [1,2,3,4,5,6,7,8,9,10,11,12];
-        $type = Yii::$app->request->post('type', 'today');
-        $data = [];
-        switch ($type) {
-            case 'today':
-                $result = $command->andWhere(['>=', 'confirmed_at', date('Y-m-d 00:00:00')])->sum('total_price');
-                $data = [$result];
-                break;
-            case 'lastday':
-                $lastDay = date('Y-m-d', strtotime("-1 days"));
-                $result = $command->andWhere(['BETWEEN', 'confirmed_at', "$lastDay 00:00:00", "$lastDay 23:59:59"])->sum('total_price');
-                $data = [$result];
-                break;
-
-            case 'week':
-                $startDate = date('Y-m-d', strtotime('last sunday'));
-                $endDate = date('Y-m-d 23:59:59');
-                $result = $command
-                ->select(['DATE(confirmed_at) as report_date', 'SUM(total_price) as total_price'])
-                ->andWhere(['BETWEEN', 'confirmed_at', $startDate, $endDate])
-                ->groupBy(['report_date'])
-                ->orderBy(['confirmed_at' => SORT_ASC])
-                ->asArray()
-                ->all();
-                $data = array_map(function($row) {
-                    return $row['total_price'];
-                }, $result);
-                break;
-                break;
-            case 'month':
-                $startDate = date('Y-m-01 00:00:00');
-                $endDate = date('Y-m-d 23:59:59');
-                $result = $command
-                ->select(['DATE(confirmed_at) as report_date', 'SUM(total_price) as total_price'])
-                ->andWhere(['BETWEEN', 'confirmed_at', $startDate, $endDate])
-                ->groupBy(['report_date'])
-                ->orderBy(['confirmed_at' => SORT_ASC])
-                ->asArray()
-                ->all();
-                $data = array_map(function($row) {
-                    return $row['total_price'];
-                }, $result);
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-        // $data = $type === 'month' ? $monthData : $weekData;
-
+        $command = Order::find()->where(['status' => Order::STATUS_COMPLETED]);
+        $type = Yii::$app->request->post('type', 'Last Month');
+        $start = Yii::$app->request->post('start');
+        $end = Yii::$app->request->post('end');
+        $form = new \backend\forms\DashboardReportForm(['type' => $type, 'start' => $start, 'end' => $end]);
+        $data = $form->run();
         return json_encode($data);
     }
 

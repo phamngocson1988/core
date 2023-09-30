@@ -1,6 +1,6 @@
 <?php
-use dosamigos\chartjs\ChartJs;
 use yii\helpers\StringHelper;
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js', ['depends' => ['\yii\web\JqueryAsset']]);
 ?>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -13,7 +13,7 @@ use yii\helpers\StringHelper;
         </li>
     </ul>
     <div class="page-toolbar">
-        <div id="dashboard-report-range" class="pull-right tooltips btn btn-sm" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
+        <div id="dashboard-report-range1" class="pull-right tooltips btn btn-sm" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
             <i class="icon-calendar"></i>&nbsp;
             <span class="thin uppercase hidden-xs"></span>&nbsp;
             <i class="fa fa-angle-down"></i>
@@ -36,8 +36,8 @@ use yii\helpers\StringHelper;
             </div>
             <div class="details">
                 <div class="number">
-                    <span data-counter="counterup" data-value="<?=number_format($revenue, 1);?>">0</span>/
-                    <span data-counter="counterup" data-value="<?=number_format($quantity, 1);?>">0</span>
+                    <span id="total_revenue">0</span>/
+                    <span id="total_quantity">0</span>
                 </div>
                 <div class="desc">  Revenue </div>
             </div>
@@ -50,7 +50,7 @@ use yii\helpers\StringHelper;
             </div>
             <div class="details">
                 <div class="number">
-                    <span data-counter="counterup" data-value="<?=number_format($orders);?>">0</span>
+                    <span id="total_order">0</span>
                 </div>
                 <div class="desc"> No. of Orders </div>
             </div>
@@ -63,7 +63,7 @@ use yii\helpers\StringHelper;
             </div>
             <div class="details">
                 <div class="number">
-                    <span data-counter="counterup" data-value="<?=$games;?>">0</span>
+                    <span id="total_game">0</span>
                 </div>
                 <div class="desc"> No. of Games </div>
             </div>
@@ -76,7 +76,7 @@ use yii\helpers\StringHelper;
             </div>
             <div class="details">
                 <div class="number"> 
-                    <span data-counter="counterup" data-value="<?=$customers;?>">0</span>
+                    <span id="total_customer">0</span>
                 </div>
                 <div class="desc"> No. of Customers </div>
             </div>
@@ -91,22 +91,13 @@ use yii\helpers\StringHelper;
                 <div class="caption">
                     <span class="caption-subject bold uppercase font-dark">Revenue</span>
                 </div>
-                <div class="actions">
-                    <select class="bs-select form-control input-small" data-style="btn-primary" tabindex="-98" id="revenueOption">
-                        <option value='today'>Today</option>
-                        <option value='lastday'>Last day</option>
-                        <option value='week'>Week</option>
-                        <option value='month'>Month</option>
-                        <option value='custom'>Custom</option>
-                    </select>
-                </div>
             </div>
             <div class="portlet-body">
                 <canvas id="revenueChart"></canvas>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-xs-6 col-sm-12">
+    <div class="col-lg-6 col-xs-6 col-sm-12">
         <div class="portlet light bordered">
             <div class="portlet-title">
                 <div class="caption ">
@@ -114,42 +105,11 @@ use yii\helpers\StringHelper;
                 </div>
             </div>
             <div class="portlet-body">
-                <?php 
-                $topCustomersLabels = array_map(function($customer) {
-                    return StringHelper::truncateWords($customer['customer_name'], 4);
-                }, $topCustomers);
-                $topCustomersDataset = array_map(function($customer) {
-                    return $customer['total_price'];
-                }, $topCustomers);
-                ?>
-                <?= ChartJs::widget([
-                    'type' => 'bar',
-                    'options' => [
-                        'height' => 500,
-                        'scales' => ['y' => ['beginAtZero' => true]],
-                        'responsive' => true
-                    ],
-                    'data' => [
-                        'labels' => $topCustomersLabels,
-                        'datasets' => [
-                            [
-                                'label' => "Top Customers",
-                                'backgroundColor' => "rgba(255,99,132,0.2)",
-                                'borderColor' => "rgba(255,99,132,1)",
-                                'pointBackgroundColor' => "rgba(255,99,132,1)",
-                                'pointBorderColor' => "#fff",
-                                'pointHoverBackgroundColor' => "#fff",
-                                'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                                'data' => [$topCustomersDataset]
-                            ]
-                        ]
-                    ]
-                ]);
-                ?>
+                <canvas id="topCustomerChart"></canvas>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-xs-6 col-sm-12">
+    <div class="col-lg-6 col-xs-6 col-sm-12">
         <div class="portlet light bordered">
             <div class="portlet-title">
                 <div class="caption ">
@@ -157,39 +117,7 @@ use yii\helpers\StringHelper;
                 </div>
             </div>
             <div class="portlet-body">
-            <?php 
-                $topGamesLabels = array_map(function($game) {
-                    return StringHelper::truncateWords($game['game_title'], 4);
-                }, $topGames);
-                $topGamesDataset = array_map(function($game) {
-                    return $game['total_price'];
-                }, $topGames);
-                ?>
-                
-                <?= ChartJs::widget([
-                    'type' => 'bar',
-                    'options' => [
-                        'height' => 500,
-                        'scales' => ['y' => ['beginAtZero' => true]],
-                        'responsive' => true
-                    ],
-                    'data' => [
-                        'labels' => $topGamesLabels,
-                        'datasets' => [
-                            [
-                                'label' => "Top Games",
-                                'backgroundColor' => "rgba(255,99,132,0.2)",
-                                'borderColor' => "rgba(255,99,132,1)",
-                                'pointBackgroundColor' => "rgba(255,99,132,1)",
-                                'pointBorderColor' => "#fff",
-                                'pointHoverBackgroundColor' => "#fff",
-                                'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                                'data' => [$topGamesDataset]
-                            ]
-                        ]
-                    ]
-                ]);
-                ?>
+                <canvas id="topGameChart"></canvas>
             </div>
         </div>
     </div>
@@ -200,26 +128,46 @@ use yii\helpers\StringHelper;
 $script = <<< JS
 
 // Revenue chart
-function getDayNames() {
-    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const result = [];
-    const today = new Date();
-    const dayIndex = today.getDay();
-    for (let i = 0; i <= dayIndex; i++) {
-    result.push(dayNames[i]);
-    }
-    return result;
-}
 const revenueLabels = {
-    today: ['Today'],
-    lastday: ['Last day'],
-    week: getDayNames(),
-    month: Array.from({length: new Date().getDate()}).map((x, i) => {
-        return String((i + 1) + '/' + (new Date().getMonth() + 1));
-    })
+    'Today': () => ['Today'],
+    'Last Day': () => ['Last Day'],
+    'Last Week': () => [6,5,4,3,2,1,0].map(num => moment().subtract('days', num).format('dddd')),
+    'Last Month': () => [
+        'Tuần 1',
+        'Tuần 2',
+        'Tuần 3',
+        'Tuần 4'
+    ],
+    'Last 3 Months': () => [
+        moment().subtract('months', 2).format('MM-YYYY'),
+        moment().subtract('months', 1).format('MM-YYYY'),
+        moment().format('MM-YYYY')
+    ], // last 3 months
+    'Last 6 Months': () => [
+        moment().subtract('months', 5).format('MM-YYYY'),
+        moment().subtract('months', 4).format('MM-YYYY'),
+        moment().subtract('months', 3).format('MM-YYYY'),
+        moment().subtract('months', 2).format('MM-YYYY'),
+        moment().subtract('months', 1).format('MM-YYYY'),
+        moment().format('MM-YYYY')
+    ], // last 6 months
+    'Custom': (startDate, endDate) => {
+        let dates = [];
+
+        let currDate = moment(startDate).startOf('day');
+        let lastDate = moment(endDate).startOf('day');
+
+        do {
+            dates.push(moment(currDate).format('DD-MM'));
+        } while(currDate.add(1, 'days').diff(lastDate) <= 0)
+
+        return dates;
+    }
 };
 const revenueChartctx = document.getElementById('revenueChart');
-const revenueChartFrame = {
+const topCustomerChartctx = document.getElementById('topCustomerChart');
+const topGameChartctx = document.getElementById('topGameChart');
+const barChartFrame = {
     type: 'bar',
     data: {
         options: { 
@@ -227,50 +175,126 @@ const revenueChartFrame = {
             responsive: true
         },
         datasets: [{
-            label: 'Revenue',
+            label: ' ',
             borderWidth: 1,
             borderColor: '#36A2EB',
             backgroundColor: '#9BD0F5'
         }]
     }
 };
-const buildRevenueChartData = (labels, chartData) => {
-    const { type, data } = revenueChartFrame;
+const buildBarChartData = (chartLabel, labels, chartData) => {
+    const { type, data } = barChartFrame;
     const { datasets } = data;
-    const chartDataSets = datasets.map(ds => ({...ds, data: chartData}));
+    const chartDataSets = datasets.map(ds => ({...ds, label: chartLabel, data: chartData}));
     return {
         type,
         data: {
             ...data,
-            labels,
+            labels: [...labels],
             datasets: chartDataSets
         }
     }
 }
-const chartHandler = new Chart(revenueChartctx, revenueChartFrame);
+const revenueChartHandler = new Chart(revenueChartctx, barChartFrame);
+const topCustomerChartHandler = new Chart(topCustomerChartctx, barChartFrame);
+const topGameChartHandler = new Chart(topGameChartctx, barChartFrame);
 
-$('#revenueOption').on('change', function() {
-    const type = $(this).val();
-    if (type === 'custom') {
-        // show date rage
-        return;
-    }
-    let labels = revenueLabels[type];
+// Update all chart
+const updateCharts = (type, start, end) => {
     $.ajax({
       url: '/site/report-revenue',
       type: 'POST',
       dataType : 'json',
-      data: { type },
+      data: { type, start, end },
       success: function (result, textStatus, jqXHR) {
-        const dataChart = buildRevenueChartData(labels, result);
-        chartHandler.data = dataChart.data;
-        chartHandler.update();
+        const revenueChartLabels = type === 'Custom' ? revenueLabels[type](start, end) : revenueLabels[type]();
+        console.log('Revenue Labels', revenueChartLabels);
+        const revenueChartData = buildBarChartData('Revenue', revenueChartLabels, result.revenue);
+        revenueChartHandler.data = revenueChartData.data;
+        revenueChartHandler.update();
+
+        const topCustomerLabels = result.topCustomers.map(customer => customer.customer_name.substring(0, 10));
+        const topCustomerValues = result.topCustomers.map(customer => customer.quantity);
+        const topCustomerChartData = buildBarChartData('Top Customers', topCustomerLabels, topCustomerValues);
+        console.log('top customer', topCustomerLabels, topCustomerValues, topCustomerChartData);
+        topCustomerChartHandler.data = topCustomerChartData.data;
+        topCustomerChartHandler.update();
+
+        const topGameLabels = result.topGames.map(game => game.game_title.substring(0, 10));
+        const topGameValues = result.topGames.map(game => game.quantity);
+        const topGameChartData = buildBarChartData('Top Games', topGameLabels, topGameValues);
+        console.log('top game', topGameLabels, topGameValues, topGameChartData);
+        topGameChartHandler.data = topGameChartData.data;
+        topGameChartHandler.update();
+
+        $('#total_revenue').text(result.other.revenue ? Number(result.other.revenue).toFixed(0) : 0);
+        $('#total_quantity').text(result.other.quantity ? Number(result.other.quantity).toFixed(1) : 0)
+        $('#total_order').text(result.other.orders || 0)
+        $('#total_game').text(result.other.games || 0)
+        $('#total_customer').text(result.other.customers || 0)
       },
     });
-});
-$('#revenueOption').trigger('change');
+}
 
 
+// Date range picker
+$('#dashboard-report-range1').daterangepicker({
+    "ranges": {
+        'Today': [moment(), ,moment()],
+        'Last Day': [moment().subtract('days', 1), moment()],
+        'Last Week': [moment().subtract('days', 6), moment()],
+        'Last Month': [moment().startOf('week').subtract(21,'days'), moment()], // last 4 weeks
+        'Last 3 Months': [moment().subtract('months', 2).startOf('month'), moment().endOf('month')], // last 3 months
+        'Last 6 Months': [moment().subtract('months', 5).startOf('month'), moment().endOf('month')], // last 6 months
+    },
+    "showCustomRangeLabel": false,
+    "locale": {
+        "format": "DD/MM/YYYY",
+        "separator": " - ",
+        "applyLabel": "Apply",
+        "cancelLabel": "Cancel",
+        "fromLabel": "From",
+        "toLabel": "To",
+        "customRangeLabel": "Custom",
+        "daysOfWeek": [
+            "Su",
+            "Mo",
+            "Tu",
+            "We",
+            "Th",
+            "Fr",
+            "Sa"
+        ],
+        "monthNames": [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ],
+        "firstDay": 0,
+    },
+    startDate: moment().startOf('week').subtract(21,'days').format('DD/MM/YYYY'), 
+    endDate: moment().format('DD/MM/YYYY'),
+    opens: (App.isRTL() ? 'right' : 'left'),
+    }, function(start, end, label) {
+        if ($('#dashboard-report-range1').attr('data-display-range') != '0') {
+            $('#dashboard-report-range1 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+        updateCharts(label, start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+    });
+    if ($('#dashboard-report-range1').attr('data-display-range') != '0') {
+    $('#dashboard-report-range1 span').html(moment().startOf('week').subtract(21,'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+}
+$('#dashboard-report-range1').show();
+updateCharts('Last Month', moment().startOf('week').subtract(21,'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
 JS;
 $this->registerJs($script);
 ?>
