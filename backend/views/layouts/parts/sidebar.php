@@ -670,7 +670,7 @@ use yii\helpers\Url;
                 </a>
               </li>
               <li class="nav-item  ">
-                <a href="<?=Url::to(['report/sale-seseller']);?>" class="nav-link " code='report.sale.reseller'>
+                <a href="<?=Url::to(['report/sale-reseller']);?>" class="nav-link " code='report.sale.reseller'>
                   <span class="title">Doanh số theo reseller</span>
                 </a>
               </li>

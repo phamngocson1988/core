@@ -213,14 +213,14 @@ const updateCharts = (type, start, end) => {
         revenueChartHandler.data = revenueChartData.data;
         revenueChartHandler.update();
 
-        const topCustomerLabels = result.topCustomers.map(customer => customer.customer_name.substring(0, 10));
+        const topCustomerLabels = result.topCustomers.map(customer => customer.customer_name);
         const topCustomerValues = result.topCustomers.map(customer => customer.quantity);
         const topCustomerChartData = buildBarChartData('Top Customers', topCustomerLabels, topCustomerValues);
         console.log('top customer', topCustomerLabels, topCustomerValues, topCustomerChartData);
         topCustomerChartHandler.data = topCustomerChartData.data;
         topCustomerChartHandler.update();
 
-        const topGameLabels = result.topGames.map(game => game.game_title.substring(0, 10));
+        const topGameLabels = result.topGames.map(game => game.game_title);
         const topGameValues = result.topGames.map(game => game.quantity);
         const topGameChartData = buildBarChartData('Top Games', topGameLabels, topGameValues);
         console.log('top game', topGameLabels, topGameValues, topGameChartData);
