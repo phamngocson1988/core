@@ -28,7 +28,7 @@ class LoginFormWidget extends Widget
     protected function getScriptCode()
     {
         $id = $this->formId;
-        $loginUrl = Url::to(['site/login'], true);
+        $loginUrl = Url::to(['site/signin'], true);
         $loginScenario = LoginForm::SCENARIO_LOGIN;
         $verifyScenario = LoginForm::SCENARIO_VERIFY;
         return "

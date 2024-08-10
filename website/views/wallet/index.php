@@ -44,7 +44,7 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
           <p class="lead mb-2">Payment method</p>
           <div class="btn-group-toggle multi-choose multi-choose-payment d-flex flex-wrap" data-toggle="buttons">
             <?php foreach ($paygates as $paygate) : ?>
-            <label class="btn flex-fill btn-secondary">
+            <label class="btn flex-fill btn-secondary" style="height:60px;display:flex;align-items:center;justify-content:center;">
               <input type="radio" name="identifier" value="<?=$paygate->identifier;?>" data-currency="<?=$paygate->currency;?>" data-exchange-rate="<?=$paygate->currency;?>" data-transfer_fee="<?=$paygate->transfer_fee;?>" data-transfer_fee_type="<?=$paygate->transfer_fee_type;?>" autocomplete="off">
               <img class="icon" src="<?=$paygate->getImageUrl();?>" />
             </label>
@@ -109,9 +109,6 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
                 </tr>
               </thead>
               <tbody>
-                <?php if (!$wallets) : ?>
-                <tr><td colspan="4" class="text-center">No data found</td></tr>
-                <?php endif;?>
                 <?php foreach ($wallets as $no => $wallet) : ?>
                 <tr>
                   <td scope="row">
@@ -147,15 +144,12 @@ $kCoinBannerLink = $setting->get('ApplicationSettingForm', 'kcoin_banner_link', 
                 </tr>
               </thead>
               <tbody>
-                <?php if (!$pendings) : ?>
-                <tr><td colspan="7" class="text-center">No data found</td></tr>
-                <?php endif;?>
                 <?php foreach ($pendings as $pending) : ?>
                 <tr>
-                  <th scope="row">
+                  <td scope="row">
                     <a href="javascript:;" class="view-detail" data-id="<?=$pending->id;?>"><?=$pending->getId();?></a>
                     <span class="date-time"><?=$pending->created_at;?></span>
-                  </th>
+                  </td>
                   <td><?=$pending->payment_method;?></td>
                   <td class="text-center"><span class="text-red"><?=StringHelper::numberFormat($pending->total_coin, 2);?> KC</span></td>
                   <td class="text-center"><?=$pending->status;?></td>

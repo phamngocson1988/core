@@ -52,17 +52,9 @@ class ConfirmOrderForm extends ActionForm
             ->andWhere(['status' => OrderSupplier::STATUS_COMPLETED]);
             $suppliers = $command->all();
             foreach ($suppliers as $orderSupplier) {
-                $supplier = Supplier::findOne($orderSupplier->supplier_id);
-                if (!$supplier) continue;
                 $orderSupplier->status = OrderSupplier::STATUS_CONFIRMED;
                 $orderSupplier->confirmed_at = $order->confirmed_at;
                 $orderSupplier->save();
-                
-                $amount = $orderSupplier->total_price;
-                $source = 'order';
-                $key = $order->id;
-                $description = sprintf("Thanh toán cho đơn hàng #%s", $order->id);
-                $supplier->topup($amount, $source, $key, $description);
             }
 
             Yii::$app->queue->push(new \common\queue\RunOrderCommissionJob(['id' => $order->id]));

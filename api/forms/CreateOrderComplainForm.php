@@ -62,7 +62,7 @@ class CreateOrderComplainForm extends Model
         if ($supplier) {
             $order->pushNotification(\api\components\notifications\OrderNotification::NOTIFY_SUPPLIER_NEW_ORDER_MESSAGE, $supplier->supplier_id);
         }
-        return true;
+        return $model;
     }
 
 

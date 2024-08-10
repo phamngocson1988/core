@@ -39,6 +39,18 @@ class Order extends ActiveRecord
     const SCENARIO_COMPLETED = self::STATUS_COMPLETED;
     const SCENARIO_DELETED = self::STATUS_DELETED;
 
+    public function init()
+    {
+        parent::init();
+        // Hook message queue to EVENT_AFTER_UPDATE
+        $this->on(self::EVENT_AFTER_UPDATE, function ($event) {
+            Yii::$app->queue->push(new \common\queue\UpdateOrderJob([
+                'order' => $event->sender->toArray(),
+                'changedAttributes' => $event->changedAttributes
+            ]));
+        });
+    }
+    
     /**
      * @inheritdoc
      */
@@ -57,7 +69,6 @@ class Order extends ActiveRecord
                 'value' => date('Y-m-d H:i:s')
             ],
             'complain' => OrderComplainBehavior::className(),
-            // ['class' => OrderComplainBehavior::className()],
             ['class' => OrderLogBehavior::className()],
             ['class' => OrderSupplierBehavior::className()],
             ['class' => OrderMailBehavior::className()],
@@ -301,17 +312,5 @@ class Order extends ActiveRecord
     {
         $this->status = self::STATUS_DELETED;
         return $this->save();
-    }
-
-    public function afterSave($insert, $changedAttributes)
-    {
-        // Hook message queue to EVENT_AFTER_UPDATE
-        $this->on(self::EVENT_AFTER_UPDATE, function ($event) {
-            Yii::$app->queue->push(new \common\queue\UpdateOrderJob([
-                'order' => $event->sender->toArray(),
-                'changedAttributes' => $event->changedAttributes
-            ]));
-        });
-        parent::afterSave($insert, $changedAttributes);
     }
 }

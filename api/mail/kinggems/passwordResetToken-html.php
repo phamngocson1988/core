@@ -5,9 +5,9 @@ $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 't
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <P>Dear <?= Html::encode($user->name) ?>,</P>
-    <p>Your password has reseted by email <?= Html::encode($user->email) ?> on <?= date(DATE_RFC2822);?></p>
+    <p>Kindly be informed that we have received the reset password request on <?= date(DATE_RFC2822);?></p>
     <hr>
-    <p>Click to this link to change your password:</p>
+    <p>If that was you, please click to this link to reset your password:</p>
   </td>
 </tr>
 <tr>
@@ -29,7 +29,6 @@ $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 't
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
     <hr>
-    <p>Did you not request this change? If you do not require a new password, let us know.</p>
-    <p>If you did this, you can safely ignore this email. If you have not done this, please protect your account. Sincerely thank you! Kinggems security team.</p>
+    <p>If that was NOT you, kindly ignore this email check futher to secure your account. Thank you!</p>
   </td>
 </tr>

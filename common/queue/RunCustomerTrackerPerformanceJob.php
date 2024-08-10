@@ -11,13 +11,19 @@ class RunCustomerTrackerPerformanceJob extends BaseObject implements \yii\queue\
     
     public function execute($queue)
     {
-        $form = new \common\forms\CalculateCustomerTrackerPerformanceForm(['id' => $this->id]);
-        if (!$form->run()) {
-            $errors = $form->getErrors();
-            $track = new Tracking();
-            $description = sprintf("RunCustomerTrackerPerformanceJob %s fail %s", $this->id, json_encode($errors));
-            $track->description = $description;
-            $track->save();
+        try {
+            $form = new \common\forms\CalculateCustomerTrackerPerformanceForm(['id' => $this->id]);
+            if (!$form->run()) {
+                $errors = $form->getErrors();
+                $track = new Tracking();
+                $description = sprintf("RunCustomerTrackerPerformanceJob %s fail %s", $this->id, json_encode($errors));
+                $track->description = $description;
+                $track->save();
+            }
+        } catch(\Exception $e) {
+            sprintf('%s fail %s', __CLASS__, $this->id);
+            return false;
         }
+        
     }
 }

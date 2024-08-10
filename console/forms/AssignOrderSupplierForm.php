@@ -129,7 +129,7 @@ class AssignOrderSupplierForm extends Model
             return $obj->status == OrderSupplier::STATUS_RETAKE && !$obj->retaken_by;
         });
         if (count($rejects) == $max_reject) {
-            return $this->add($attribute, sprintf("Nhà cung cấp này đã không nhận đơn %s lần", $max_reject));
+            return $this->addError($attribute, sprintf("Nhà cung cấp này đã không nhận đơn %s lần", $max_reject));
         }
     }
 

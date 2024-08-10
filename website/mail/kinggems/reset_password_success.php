@@ -1,24 +1,11 @@
+<?php
+use yii\helpers\Html;
+?>
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
-    <P>Dear <?=$order->customer_name;?>,</P>
-    We would like to inform that your order has been confirmed.
-    <hr>
-    <p>The order is processed with following details:</p>
-    + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
-    + Game: <?=$order->game_title;?><br/>
-    + Quantity / loaded amount: <?=number_format($order->quantity, 1);?><br/>
-    <?php if ($order->raw): ?>
-    <?php $rawPart = explode(PHP_EOL, $order->raw);?>
-    <?php foreach ($rawPart as $raw) :?>
-    + <?=$raw;?><br/>
-    <?php endforeach;?>
-    <?php else : ?>
-    + <?=$order->username;?><br/>
-    + <?=$order->password;?><br/>
-    + <?=$order->character_name;?><br/>
-    <?php endif;?>
-    <hr>
-    <p>We’re happy to help you with any further questions or concerns. Please contact our customer services via :</p>
+    <P>Dear <?= Html::encode($user->name) ?>,</P>
+    <p>Kindly be informed that your new password has been set. Kindly secure your login information.</p>
+    <p>Thank you!</p>
   </td>
 </tr>
 <tr>

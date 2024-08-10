@@ -65,4 +65,9 @@ class SignupEventHandler extends Model
 	        ])->send();
     	}
     }
+
+    public static function welcome(AfterSignupEvent $event) 
+    {
+        Yii::$app->queue->push(new \website\queue\SignupEmail(['user' => $event->user]));
+    }
 }

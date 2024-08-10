@@ -1,6 +1,7 @@
 <?php
 namespace website\forms;
 
+use Yii;
 use yii\base\Model;
 use yii\base\InvalidParamException;
 use website\models\User;
@@ -59,6 +60,20 @@ class ResetPasswordForm extends Model
         $user->setPassword($this->password);
         $user->removePasswordResetToken();
 
-        return $user->save(false);
+        $user->save(false);
+
+        $settings = Yii::$app->settings;
+        $adminEmail = $settings->get('ApplicationSettingForm', 'customer_service_email', null);
+        Yii::$app
+        ->mailer
+        ->compose(
+            ['html' => 'reset_password_success'],
+            ['user' => $user]
+        )
+        ->setFrom([$adminEmail => Yii::$app->name])
+        ->setTo($user->email)
+        ->setSubject('KingGems- Reset Password successfully')
+        ->send();    
+        return true;
     }
 }

@@ -24,15 +24,17 @@ class CartController extends Controller
         $cart = Yii::$app->cart;
         $request = Yii::$app->request;
         $item = CartItem::findOne($id);
-        $item->setScenario(CartItem::SCENARIO_ADD_CART);
+        $item->setScenario(CartItem::SCENARIO_BULK_CART);
         $item->quantity = $request->post('quantity');
-        $item->username = $request->post('username');
-        $item->password = $request->post('password');
-        $item->character_name = $request->post('character_name');
-        $item->recover_code = $request->post('recover_code');
-        $item->server = $request->post('server');
-        $item->note = $request->post('note');
-        $item->login_method = $request->post('login_method');
+        // $item->username = $request->post('username');
+        // $item->password = $request->post('password');
+        // $item->character_name = $request->post('character_name');
+        // $item->recover_code = $request->post('recover_code');
+        // $item->server = $request->post('server');
+        // $item->note = $request->post('note');
+        // $item->login_method = $request->post('login_method');
+        $item->raw = $request->post('raw');
+        $item->bulk = strtotime('now');
         $amount = $request->post('amount');
         if (!$item->validate()) {
             $message = $item->getErrorSummary(true);

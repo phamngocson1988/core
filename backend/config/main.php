@@ -10,7 +10,7 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'layout' => 'main.tpl',
+    'layout' => 'main',
     'defaultRoute' => 'order',
     'bootstrap' => [
         'log', 

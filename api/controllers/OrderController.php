@@ -6,6 +6,7 @@ use yii\rest\Controller;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use api\models\Order;
 
 class OrderController extends Controller
@@ -25,7 +26,8 @@ class OrderController extends Controller
                 'move-to-confirmed' => ['post'],
                 'create' => ['post'],
                 'pay' => ['post'],
-                'test' => ['get'],
+                'view' => ['get'],
+                'views' => ['post'],
             ],
         ];
 	    return $behaviors;
@@ -41,6 +43,14 @@ class OrderController extends Controller
             throw new NotFoundHttpException('order does not exist.');
         }
 		return $order;
+	}
+
+    public function actionViews()
+	{
+        $request = Yii::$app->request;
+        $ids = $request->post('ids', []);
+		$orders = Order::find()->where(['id' => $ids, 'customer_id' => Yii::$app->user->id])->all();
+		return $orders;
 	}
 
 	public function actionCancel($id)
@@ -73,7 +83,8 @@ class OrderController extends Controller
             'user_sublink_id' => $user_sublink_id,
             'is_customer' => $is_customer ? 'Y' : 'N'
         ]);
-        if (!$form->create()) {
+        $complain = $form->create();
+        if (!$complain) {
             $message = $form->getFirstErrors();
             $message = reset($message);
             return [
@@ -81,7 +92,7 @@ class OrderController extends Controller
                 'error' => $message
             ];
         }
-        return ['status' => true];
+        return ['status' => true, 'id' => $complain->id];
     }
 
     public function actionListComplain($id)
@@ -135,15 +146,17 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $user = Yii::$app->user->getIdentity();
         $item = \api\components\cart\CartItem::findOne($id);
-        $item->setScenario(\api\components\cart\CartItem::SCENARIO_ADD_CART);
+        $item->setScenario(\api\components\cart\CartItem::SCENARIO_BULK_CART);
         $item->quantity = $request->post('quantity');
-        $item->username = $request->post('username');
-        $item->password = $request->post('password');
-        $item->character_name = $request->post('character_name');
-        $item->recover_code = $request->post('recover_code');
-        $item->server = $request->post('server');
-        $item->note = $request->post('note');
-        $item->login_method = $request->post('login_method');
+        // $item->username = $request->post('username');
+        // $item->password = $request->post('password');
+        // $item->character_name = $request->post('character_name');
+        // $item->recover_code = $request->post('recover_code');
+        // $item->server = $request->post('server');
+        // $item->note = $request->post('note');
+        // $item->login_method = $request->post('login_method');
+        $item->raw = $request->post('raw');
+        $item->bulk = strtotime('now');
         if (!$item->validate()) {
             $message = $item->getErrorSummary(true);
             $message = reset($message);
@@ -177,6 +190,7 @@ class OrderController extends Controller
             $code = $generateLinkForm->generate();
             if ($code) {
                 $paymentLink = sprintf('%s/%s.html?token=%s', Yii::$app->params['payment_url'], $code, $order->payment_token);
+                $paymentApi = Url::to(['wallet/purchase', 'token' => $order->payment_token], true);
                 $result['payment_link'] = $paymentLink;
             }
         }

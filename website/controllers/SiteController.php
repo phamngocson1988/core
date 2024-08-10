@@ -45,11 +45,11 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term', 'request-access'],
+                        'actions' => ['index', 'auth', 'error', 'test', 'social', 'test-mail', 'term', 'request-access', 'register'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['signup', 'login', 'request-password-reset', 'reset-password', 'request-email-reset'],
+                        'actions' => ['signup', 'login', 'signin', 'request-password-reset', 'reset-password', 'request-email-reset'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -103,7 +103,7 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionLogin()
+    public function actionSignin()
     {
         $request = Yii::$app->request;
         if (!$request->isAjax) throw new BadRequestHttpException("Error Processing Request", 1);
@@ -132,7 +132,7 @@ class SiteController extends Controller
             if ($request->get('affiliate')) {
                 Yii::$app->session->set('affiliate', $request->get('affiliate'));
             }
-            return $this->redirect(['site/index']);
+            return $this->redirect(['site/register']);
         }
         if (!$request->isPost) throw new BadRequestHttpException("Error Processing Request", 1);
         $model = new SignupForm();
@@ -155,6 +155,7 @@ class SiteController extends Controller
             $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'affiliateCheckingEvent']);
         }
         $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'notifyStaff']);
+        $model->on(SignupForm::EVENT_AFTER_SIGNUP, [SignupEventHandler::className(), 'welcome']);
 
         if ($model->load($request->post()) && $model->validate()) {
             $user = $model->signup();
@@ -235,6 +236,25 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
         return $this->goHome();
+    }
+
+    public function actionRegister()
+    {
+        $signupForm = new \website\forms\SignupForm();
+        return $this->render('register', ['model' => $signupForm]);
+    }
+
+    public function actionLogin()
+    {
+        $loginForm = new LoginForm();
+        $loginScenario = LoginForm::SCENARIO_LOGIN;
+        $verifyScenario = LoginForm::SCENARIO_VERIFY;
+        return $this->render('login', [
+            'model' => $loginForm,
+            'scenario' => LoginForm::SCENARIO_LOGIN,
+            'loginScenario' => $loginScenario,
+            'verifyScenario' => $verifyScenario,
+        ]);
     }
 
     public function actionTerm($slug)

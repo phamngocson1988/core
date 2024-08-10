@@ -60,14 +60,15 @@ class UpdateOrderToCompletedForm extends Model
             $order->save();
 
             // Complete supplier
-            $supplier = $order->supplier;
-            if ($supplier && !$supplier->isRequest()) {
-                $supplier->status = OrderSupplier::STATUS_COMPLETED;
-                $supplier->completed_at = date('Y-m-d H:i:s');
-                $supplier->total_price = $supplier->price * $supplier->doing;
-                $supplier->save();
+            $orderSupplier = $order->supplier;
+            if ($orderSupplier && !$orderSupplier->isRequest()) {
+                $orderSupplier->status = OrderSupplier::STATUS_COMPLETED;
+                $orderSupplier->completed_at = date('Y-m-d H:i:s');
+                $orderSupplier->total_price = $orderSupplier->price * $orderSupplier->doing;
+                $orderSupplier->save();
             }
             $transaction->commit();
+            Yii::$app->queue->push(new \common\queue\PaySupplierByOrderJob(['id' => $order->id]));
             return true;
         } catch(Exception $e) {
             $transaction->rollback();

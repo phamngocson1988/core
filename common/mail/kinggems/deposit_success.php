@@ -1,23 +1,14 @@
 <tr>
   <td align="initial" dir="ltr" style="padding-bottom: 22px; font-weight: normal; font-size: 13px; line-height: 18px; color: #404041; text-align: left;">
-    <P>Dear <?=$order->customer_name;?>,</P>
-    We would like to inform that your order has been confirmed.
+    <P>Dear <?=$name;?>,</P>
+    Kindly be informed that your deposit transaction is approved. Please check your Kcoin wallet balance with details, below:
     <hr>
-    <p>The order is processd with following details:</p>
-    + Order No: <span style="color:#E95D2B"><?=$order->id;?></span><br/>
-    + Game: <?=$order->game_title;?><br/>
-    + Quantity / loaded amount: <?=number_format($order->quantity, 1);?><br/>
-    <?php if ($order->raw): ?>
-    <?php $rawPart = explode(PHP_EOL, $order->raw);?>
-    <?php foreach ($rawPart as $raw) :?>
-    + <?=$raw;?><br/>
-    <?php endforeach;?>
-    <?php else : ?>
-    + <?=$order->username;?><br/>
-    + <?=$order->password;?><br/>
-    + <?=$order->character_name;?><br/>
-    <?php endif;?>
+    - Transaction ID: T<span style="color:#E95D2B"><?=$id;?></span> <br/>
+    - Deposit Amount: <?=$amount;?> Kcoin <br/>
+    - Balance before: <?=$before;?> Kcoin <br/>
+    - Balance after: <?=$after;?> Kcoin <br/>
     <hr>
+    <p>You may place order right now!</p>
     <p>We’re happy to help you with any further questions or concerns. Please contact our customer services via :</p>
   </td>
 </tr>

@@ -18,6 +18,18 @@ class OrderComplains extends ActiveRecord
     const OBJECT_NAME_ADMIN = 'admin';
     const OBJECT_NAME_SUPPLIER = 'supplier';
 
+    public function init()
+    {
+        parent::init();
+        // Hook message queue to EVENT_AFTER_UPDATE
+        $this->on(self::EVENT_AFTER_INSERT, function ($event) {
+            Yii::$app->queue->push(new \common\queue\NotifyOrderMessageJob([
+                'orderId' => $event->sender->order_id,
+                'messageId' => $event->sender->id
+            ]));
+        });
+    }
+    
     public static function tableName()
     {
         return '{{%order_complains}}';

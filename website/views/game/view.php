@@ -510,7 +510,12 @@ var app = new Vue({
       const fee = paygate.transfer_fee;
       if (fee) {
           const type = paygate.transfer_fee_type;
-          return type === 'fix' ? fee * this.totalOrder : fee * this.quantity;
+          if (type === 'fix') {
+            return fee * this.totalOrder;
+          } else if (type === 'percent') {
+            const fixfee = (fee * this.subPrice) / 100; 
+            return Number(fixfee.toFixed(1));
+          }
       } else {
           return 0;
       }

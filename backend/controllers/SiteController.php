@@ -7,6 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use backend\forms\LoginForm;
 use backend\forms\ActivateUserForm;
+use backend\models\Order;
 
 /**
  * Site controller
@@ -24,7 +25,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'email', 'sql'],
+                        'actions' => ['logout', 'index', 'email', 'sql', 'report-revenue'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -55,6 +56,18 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+
+    public function actionReportRevenue() 
+    {
+        $command = Order::find()->where(['status' => Order::STATUS_COMPLETED]);
+        $type = Yii::$app->request->post('type', 'Last Month');
+        $start = Yii::$app->request->post('start');
+        $end = Yii::$app->request->post('end');
+        $form = new \backend\forms\DashboardReportForm(['type' => $type, 'start' => $start, 'end' => $end]);
+        $data = $form->run();
+        return json_encode($data);
+    }
+
     /**
      * Login action.
      *
@@ -62,7 +75,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        $this->layout = 'login.tpl';
+        $this->layout = 'login';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

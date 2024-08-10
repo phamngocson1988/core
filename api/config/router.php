@@ -10,6 +10,7 @@ return [
         'game/<id:\d+>' => 'game/view',
         'user/search' => 'user/search',
         'order/<id:\d+>' => 'order/view',
+        'order/views' => 'order/views',
         'order/cancel/<id:\d+>' => 'order/cancel',
         'order/send-complain/<id:\d+>' => 'order/send-complain',
         'order/list-complain/<id:\d+>' => 'order/list-complain',
@@ -17,6 +18,10 @@ return [
         'order/create/<id:\d+>' => 'order/create',
         'order/pay/<id:\d+>' => 'order/pay',
         'checkout/<id:\d+>' => 'cart/checkout',
+        'wallet/calculate' => 'wallet/calculate',
+        'wallet/purchase' => 'wallet/purchase',
+        'wallet/paygates' => 'wallet/paygates',
+        'wallet/update/<id:\d+>' => 'wallet/update',
         'test-order/<id:\d+>' => 'order/test',
     ],
 ];

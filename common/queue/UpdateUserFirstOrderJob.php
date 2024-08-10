@@ -13,12 +13,17 @@ class UpdateUserFirstOrderJob extends BaseObject implements \yii\queue\JobInterf
     
     public function execute($queue)
     {
-        $user = User::find()->select(['id', 'first_order_at'])->where(['id' => $this->user_id])->one();
-        if ($user && !$user->first_order_at) {
-          $order = Order::find()->select(['created_at'])->where(['id' => $this->order_id])->one();
-          $user->first_order_at = $order->created_at;
-          $user->save();
+        try {
+            $user = User::find()->select(['id', 'first_order_at'])->where(['id' => $this->user_id])->one();
+            if ($user && !$user->first_order_at) {
+              $order = Order::find()->select(['created_at'])->where(['id' => $this->order_id])->one();
+              $user->first_order_at = $order->created_at;
+              $user->save();
+            }
+            return true;
+        } catch(\Exception $e) {
+            sprintf('%s fail %s', __CLASS__, $this->id);
+            return false;
         }
-        return true;
     }
 }

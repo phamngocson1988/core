@@ -28,7 +28,7 @@
     {include file='./parts/header.tpl'}
     <div class="clearfix"></div>
     <div class="page-container">
-      {include file='./parts/sidebar.tpl'}
+      {include file='./parts/sidebar.php'}
       <div class="page-content-wrapper">
         <!-- BEGIN CONTENT BODY -->
         <div class="page-content">

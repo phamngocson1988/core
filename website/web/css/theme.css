@@ -125,3 +125,12 @@ p.Normal>img {
 .section-nav {
    font-weight: normal;
 }
+
+.post-item .post-thumb img {
+   height: 200px;
+}
+
+.flex-fill.price {
+   display: flex;
+   flex-direction: column;
+}

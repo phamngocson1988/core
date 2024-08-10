@@ -290,4 +290,13 @@ class TestController extends Controller
         Yii::$app->queueManual->executeSingleJob(7);
         die('Run Queue');
     }
+
+    public function actionRedis()
+    {
+        $key = 'aaa';
+        $content = 'xxx';
+        Yii::$app->redis->set($key, $content);
+        echo Yii::$app->redis->get($key);
+        die;
+    }
 }

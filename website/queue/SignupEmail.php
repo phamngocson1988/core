@@ -16,7 +16,7 @@ class SignupEmail extends BaseObject implements \yii\queue\JobInterface
         return Yii::$app->mailer->compose('welcome_newcomer', ['user' => $user])
         ->setTo($user->email)
         ->setFrom([$admin => $siteName])
-        ->setSubject('Registration Confirmation')
+        ->setSubject('KingGems- Welcome!!!')
         ->setTextBody("Welcome to Kinggems")
         ->send();
     }
